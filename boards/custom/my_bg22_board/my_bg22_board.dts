@@ -46,12 +46,11 @@
 	status = "okay";
 };
 
-/* The custom board populates an external 32.768kHz sleep crystal.
- * Setting ctune to 0 disables internal load capacitors, relying instead on external board capacitors.
+/* The custom board does not populate an external 32.768kHz sleep crystal.
+ * LFXO is disabled, and internal LFRCO is used for the sleep clock.
  */
 &lfxo {
-	ctune = <0>;
-	status = "okay";
+	status = "disabled";
 };
 
 &lfrco {
@@ -59,23 +58,23 @@
 };
 
 &em23grpaclk {
-	clocks = <&lfxo>;
+	clocks = <&lfrco>;
 };
 
 &em4grpaclk {
-	clocks = <&lfxo>;
+	clocks = <&lfrco>;
 };
 
 &prortcclk {
-	clocks = <&lfxo>;
+	clocks = <&lfrco>;
 };
 
 &rtccclk {
-	clocks = <&lfxo>;
+	clocks = <&lfrco>;
 };
 
 &wdog0clk {
-	clocks = <&lfxo>;
+	clocks = <&lfrco>;
 };
 
 &usart1 {
