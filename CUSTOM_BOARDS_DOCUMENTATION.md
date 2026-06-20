@@ -18,7 +18,7 @@ The two custom boards utilize different sub-families of the Silicon Labs Series 
 | **RAM** | 32 KB | 32 KB |
 | **RF Max TX Power** | +6 dBm | 0 dBm |
 | **Package** | QFN40 (40-pin) | QFN32 (32-pin) |
-| **Sleep Crystal (LFXO)** | **Present** (Onboard 32.768 kHz) | **Absent** (Uses internal LFRCO RC) |
+| **Sleep Crystal (LFXO)** | **Absent** (Uses internal LFRCO RC) | **Absent** (Uses internal LFRCO RC) |
 | **Bluetooth PHYs** | 1M, 2M, Coded (Long Range) | 1M, 2M only |
 | **Direction Finding (AoA/AoD)**| Supported | Not Supported |
 
@@ -26,8 +26,8 @@ The two custom boards utilize different sub-families of the Silicon Labs Series 
 
 ## 🛠️ 2. Device Tree & Clock Tree Architectures
 
-### Board 1: `my_bg22_board` (C224 - 76.8 MHz Clock & LFXO)
-The high-tier Category 3 SoC supports running the CPU up to 76.8 MHz. It achieves this by locking the internal DPLL (`&hfrcodpll`) to the 38.4 MHz external HFXO crystal reference. Because this custom board layout includes an onboard 32.768 kHz sleep crystal, we enable the low-frequency crystal oscillator (`&lfxo`) and route all low-power sleep clocks to it.
+### Board 1: `my_bg22_board` (C224 - 76.8 MHz Clock & LFRCO)
+The high-tier Category 3 SoC supports running the CPU up to 76.8 MHz. It achieves this by locking the internal DPLL (`&hfrcodpll`) to the 38.4 MHz external HFXO crystal reference. Because this custom board layout does not contain an onboard 32.768 kHz sleep crystal, the LFXO is disabled (`&lfxo { status = "disabled"; };`), and all low-frequency sleep/deep sleep clocks are routed to the internal RC oscillator (`&lfrco`).
 
 ```dts
 /* my_bg22_board.dts Clock Tree configuration */
@@ -51,9 +51,9 @@ The high-tier Category 3 SoC supports running the CPU up to 76.8 MHz. It achieve
 	dpll-n = <3839>;
 };
 
-/* Sleep Clocks routed to the external 32.768 kHz crystal (LFXO) */
+/* Sleep clocks mapped to internal RC oscillator (LFRCO) */
 &lfxo {
-	status = "okay";
+	status = "disabled";
 };
 
 &lfrco {
@@ -61,19 +61,19 @@ The high-tier Category 3 SoC supports running the CPU up to 76.8 MHz. It achieve
 };
 
 &em23grpaclk {
-	clocks = <&lfxo>;
+	clocks = <&lfrco>;
 };
 &em4grpaclk {
-	clocks = <&lfxo>;
+	clocks = <&lfrco>;
 };
 &prortcclk {
-	clocks = <&lfxo>;
+	clocks = <&lfrco>;
 };
 &rtccclk {
-	clocks = <&lfxo>;
+	clocks = <&lfrco>;
 };
 &wdog0clk {
-	clocks = <&lfxo>;
+	clocks = <&lfrco>;
 };
 ```
 
