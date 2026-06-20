@@ -230,7 +230,7 @@ For absolute minimum sleep current, you can completely eliminate the UART hardwa
 
 We have created two dedicated profile files in the repository:
 1. **[prj-low-power.conf](file:///home/mihail/zephyrproject/workspace/bg22c11/prj-low-power.conf)**: Compiles out the console, UART serial drivers, logging, and SEGGER RTT console.
-2. **[low-power.overlay](file:///home/mihail/zephyrproject/workspace/bg22c11/low-power.overlay)**: Disables the `usart1` hardware peripheral in the Devicetree and removes the `zephyr,console` and `zephyr,shell-uart` chosen attributes.
+2. **[low-power.overlay](file:///home/mihail/zephyrproject/workspace/bg22c11/low-power.overlay)**: Disables the `usart0`, `usart1`, `euart0`, `i2c0`, and `i2c1` hardware peripherals in the Devicetree and removes the `zephyr,console` and `zephyr,shell-uart` chosen attributes.
 
 #### Build Command using Low-Power Profile:
 ```bash

@@ -10,6 +10,22 @@
 	};
 };
 
+&usart0 {
+	status = "disabled";
+};
+
 &usart1 {
+	status = "disabled";
+};
+
+&euart0 {
+	status = "disabled";
+};
+
+&i2c0 {
+	status = "disabled";
+};
+
+&i2c1 {
 	status = "disabled";
 };
