@@ -225,6 +225,27 @@ CONFIG_USE_SEGGER_RTT=n
 CONFIG_RTT_CONSOLE=n
 ```
 
+### 4. Headless Low-Power Optimization Profile (UART & Serial Disabled)
+For absolute minimum sleep current, you can completely eliminate the UART hardware and logging/serial software overhead. 
+
+We have created two dedicated profile files in the repository:
+1. **[prj-low-power.conf](file:///home/mihail/zephyrproject/workspace/bg22c11/prj-low-power.conf)**: Compiles out the console, UART serial drivers, logging, and SEGGER RTT console.
+2. **[low-power.overlay](file:///home/mihail/zephyrproject/workspace/bg22c11/low-power.overlay)**: Disables the `usart1` hardware peripheral in the Devicetree and removes the `zephyr,console` and `zephyr,shell-uart` chosen attributes.
+
+#### Build Command using Low-Power Profile:
+```bash
+west build -p always -b my_bg22_board -- \
+  -DEXTRA_CONF_FILE=prj-low-power.conf \
+  -DEXTRA_DTC_OVERLAY_FILE=low-power.overlay \
+  -DBOARD_ROOT=/home/mihail/zephyrproject/workspace/bg22c11
+```
+
+#### Memory Footprint Savings (C224 Target):
+| Section | Standard Build (With RTT Logs) | Low-Power Build (No Serial/RTT) | Savings |
+|---------|--------------------------------|---------------------------------|---------|
+| **FLASH** | 192508 B (36.72%) | 177728 B (33.90%) | **14780 B (~15 KB)** |
+| **RAM** | 25472 B (77.73%) | 22416 B (68.41%) | **3056 B (~3 KB)** |
+
 ---
 
 ## 🚀 5. How to Build, Flash, and Debug
