@@ -1,0 +1,5 @@
+# Copyright (c) 2026 Mihail
+# SPDX-License-Identifier: Apache-2.0
+
+config BOARD_MY_BG22_C112_BOARD
+	select SOC_EFR32BG22C222F352GM32

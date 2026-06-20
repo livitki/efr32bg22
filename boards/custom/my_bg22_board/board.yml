@@ -1,0 +1,6 @@
+boards:
+  - name: my_bg22_board
+    full_name: My BG22 Custom Board
+    vendor: custom
+    socs:
+      - name: efr32bg22c224f512gm40

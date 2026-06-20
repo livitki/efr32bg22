@@ -1,0 +1,6 @@
+boards:
+  - name: my_bg22_c112_board
+    full_name: My BG22 C112 Custom Board
+    vendor: custom
+    socs:
+      - name: efr32bg22c222f352gm32

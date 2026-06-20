@@ -1,0 +1,130 @@
+/*
+ * Copyright (c) 2026 Mihail
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/dts-v1/;
+#include <silabs/xg22/efr32bg22c224f512gm40.dtsi>
+#include <zephyr/dt-bindings/pinctrl/silabs/xg22-pinctrl.h>
+#include <zephyr/dt-bindings/regulator/silabs_dcdc.h>
+
+/ {
+	model = "My Custom EFR32BG22C224 Board";
+	compatible = "custom,my-bg22-board", "silabs,efr32bg22";
+
+	chosen {
+		zephyr,sram = &sram0;
+		zephyr,flash = &flash0;
+		zephyr,console = &usart1;
+		zephyr,shell-uart = &usart1;
+		zephyr,bt-hci = &bt_hci_silabs;
+	};
+};
+
+/* EFR32BG22C224 runs at max 76.8 MHz using the internal HFRCODPLL */
+&cpu0 {
+	clock-frequency = <76800000>;
+};
+
+&hfxo {
+	status = "okay";
+};
+
+&hfrcodpll {
+	clock-frequency = <DT_FREQ_K(76800)>;
+	clocks = <&hfxo>;
+	dpll-autorecover;
+	dpll-edge = "fall";
+	dpll-lock = "phase";
+	dpll-m = <1919>;
+	dpll-n = <3839>;
+};
+
+&dcdc {
+	regulator-boot-on;
+	regulator-initial-mode = <SILABS_DCDC_MODE_BUCK>;
+	status = "okay";
+};
+
+/* The custom board lacks an external 32.768kHz sleep crystal, so LFXO is disabled and we use LFRCO */
+&lfxo {
+	status = "okay";
+};
+
+&lfrco {
+	status = "okay";
+};
+
+&em23grpaclk {
+	clocks = <&lfxo>;
+};
+
+&em4grpaclk {
+	clocks = <&lfxo>;
+};
+
+&prortcclk {
+	clocks = <&lfxo>;
+};
+
+&rtccclk {
+	clocks = <&lfxo>;
+};
+
+&wdog0clk {
+	clocks = <&lfxo>;
+};
+
+&usart1 {
+	pinctrl-0 = <&usart1_default>;
+	pinctrl-names = "default";
+	status = "okay";
+};
+
+&pinctrl {
+	usart1_default: usart1_default {
+		group0 {
+			pins = <USART1_TX_PA5>;
+			drive-push-pull;
+			output-high;
+		};
+
+		group1 {
+			pins = <USART1_RX_PA6>;
+			input-enable;
+			silabs,input-filter;
+		};
+	};
+};
+
+&gpio {
+	status = "okay";
+};
+
+&gpioa {
+	status = "okay";
+};
+
+&gpiob {
+	status = "okay";
+};
+
+&gpioc {
+	status = "okay";
+};
+
+&gpiod {
+	status = "okay";
+};
+
+&rtcc0 {
+	status = "okay";
+};
+
+&trng {
+	status = "okay";
+};
+
+&bt_hci_silabs {
+	status = "okay";
+};

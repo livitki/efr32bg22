@@ -1,0 +1,141 @@
+/*
+ * Copyright (c) 2026 Mihail
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/dts-v1/;
+#include <silabs/xg22/efr32bg22c222f352gm32.dtsi>
+#include <zephyr/dt-bindings/pinctrl/silabs/xg22-pinctrl.h>
+#include <zephyr/dt-bindings/regulator/silabs_dcdc.h>
+
+/ {
+	model = "My Custom EFR32BG22C112 Board";
+	compatible = "custom,my-bg22-c112-board", "silabs,efr32bg22";
+
+	chosen {
+		zephyr,sram = &sram0;
+		zephyr,flash = &flash0;
+		zephyr,console = &usart1;
+		zephyr,shell-uart = &usart1;
+		zephyr,bt-hci = &bt_hci_silabs;
+	};
+};
+
+/* EFR32BG22C112 runs at max 38.4 MHz, directly from HFXO (DPLL disabled) */
+&cpu0 {
+	clock-frequency = <38400000>;
+};
+
+&sysclk {
+	clocks = <&hfxo>;
+};
+
+&em01grpaclk {
+	clocks = <&hfxo>;
+};
+
+&em01grpbclk {
+	clocks = <&hfxo>;
+};
+
+&hfrcodpll {
+	status = "disabled";
+};
+
+&hfxo {
+	status = "okay";
+};
+
+&dcdc {
+	regulator-boot-on;
+	regulator-initial-mode = <SILABS_DCDC_MODE_BUCK>;
+	status = "okay";
+};
+
+/* The custom board lacks an external 32.768kHz sleep crystal, so LFXO is disabled and we use LFRCO */
+&lfxo {
+	status = "disabled";
+};
+
+&lfrco {
+	status = "okay";
+};
+
+&em23grpaclk {
+	clocks = <&lfrco>;
+};
+
+&em4grpaclk {
+	clocks = <&lfrco>;
+};
+
+&prortcclk {
+	clocks = <&lfrco>;
+};
+
+&rtccclk {
+	clocks = <&lfrco>;
+};
+
+&wdog0clk {
+	clocks = <&lfrco>;
+};
+
+&usart1 {
+	pinctrl-0 = <&usart1_default>;
+	pinctrl-names = "default";
+	status = "okay";
+};
+
+&pinctrl {
+	usart1_default: usart1_default {
+		group0 {
+			pins = <USART1_TX_PA5>;
+			drive-push-pull;
+			output-high;
+		};
+
+		group1 {
+			pins = <USART1_RX_PA6>;
+			input-enable;
+			silabs,input-filter;
+		};
+	};
+};
+
+&gpio {
+	status = "okay";
+};
+
+&gpioa {
+	status = "okay";
+};
+
+&gpiob {
+	status = "okay";
+};
+
+&gpioc {
+	status = "okay";
+};
+
+&gpiod {
+	status = "okay";
+};
+
+&rtcc0 {
+	status = "okay";
+};
+
+&trng {
+	status = "okay";
+};
+
+&bt_hci_silabs {
+	status = "okay";
+};
+
+&radio {
+	/delete-property/ ble-cte-tx-supported;
+	pa-max-power-dbm = <0>;
+};
