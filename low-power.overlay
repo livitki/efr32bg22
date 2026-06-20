@@ -1,0 +1,15 @@
+/*
+ * Low-Power Devicetree Overlay
+ * Disables USART1 and clears chosen console/shell-uart properties to disable serial hardware.
+ */
+
+/ {
+	chosen {
+		/delete-property/ zephyr,console;
+		/delete-property/ zephyr,shell-uart;
+	};
+};
+
+&usart1 {
+	status = "disabled";
+};
